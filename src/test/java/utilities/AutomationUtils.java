@@ -33,6 +33,6 @@ public class AutomationUtils {
 	}
 	
 	public void jsScrollIntoView(WebElement element, WebDriver driver) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
+		
 	}
 }
