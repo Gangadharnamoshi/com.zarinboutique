@@ -31,4 +31,8 @@ public class AutomationUtils {
 		wait.until(ExpectedConditions.elementToBeClickable(element));
 		element.click();
 	}
+	
+	public void jsScrollIntoView() {
+		
+	}
 }
