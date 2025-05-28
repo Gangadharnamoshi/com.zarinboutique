@@ -24,7 +24,7 @@ public class BaseClass {
 	public WebDriver getdriver() {
 		return driver;
 	}
-	@BeforeTest
+	
 	public void setup() throws IOException {
 		if (driver == null) {
 
@@ -56,7 +56,7 @@ public class BaseClass {
 
 		}
 	}
-	@AfterTest
+	
 	public void teardown() {
 
 		driver.close();

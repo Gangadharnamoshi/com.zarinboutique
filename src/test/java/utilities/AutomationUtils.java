@@ -32,6 +32,8 @@ public class AutomationUtils {
 		element.click();
 	}
 	
-	public void jsScrollIntoView(WebElement element, WebDriver driver) {
+	public void highlightElement(WebElement element, WebDriver driver) {
+	    JavascriptExecutor js = (JavascriptExecutor) driver;
+	    js.executeScript("arguments[0].style.border='3px solid red'", element);
 	}
 }
