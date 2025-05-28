@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.annotations.AfterTest;
@@ -24,7 +26,7 @@ public class BaseClass {
 	public WebDriver getdriver() {
 		return driver;
 	}
-	
+
 	public void setup() throws IOException {
 		if (driver == null) {
 
@@ -33,7 +35,7 @@ public class BaseClass {
 			FileReader fr = new FileReader(
 					System.getProperty("user.dir") + "//src//test//resources//config files//configuration.properties");
 			//FileReader fr1 = new FileReader(
-				//	System.getProperty("user.dir") + "//src//test//resources//config files//locators.properties");
+			//	System.getProperty("user.dir") + "//src//test//resources//config files//locators.properties");
 			prop.load(fr);
 			//loc.load(fr1);
 		}
@@ -56,12 +58,17 @@ public class BaseClass {
 
 		}
 	}
-	
-	public void teardown() {
 
+	public void teardown() {
 		driver.close();
 		System.out.println("tear down succeessful");
-
 	}
 
+	// ✅ Highlight method added here
+	public void highlightElement(WebElement element) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].style.border='3px solid red'", element);
+	}
 }
+
+
