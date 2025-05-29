@@ -54,21 +54,32 @@ public class Page_AllCollections extends BaseClass {
 	private WebElement checkout;
 
 	public boolean isZarinLogoDisplayed() {
+		highLightElement(zarinLogo);
 		return zarinLogo.isDisplayed();
 	}
 
 	public void clickOnAllCollections() {
+		highLightElement(allCollections);
 		allCollections.click();
 	}
 
 	public void clickOnAvailability() {
-
+		highLightElement(availability);
 		AutomationUtils.waitForTheElementAndClick(availability, driver);
 	}
 
 	public void clickOnInStock() {
+		highLightElement(inStock);
 		AutomationUtils.clickElementUsingJs(inStock, driver);
 	}
+	
+	public void closeAvailabilityBox() {
+		highLightElement(availability);
+		AutomationUtils.clickElementUsingJs(allCollections, driver);
+		AutomationUtils.waitForElementToDisapper(allCollections, driver);
+	}
+	
+	
 
 	public void enterMinimumAndMaximumPrice() {
 		AutomationUtils.waitForTheElementToBeClickable(price, driver);
@@ -76,6 +87,10 @@ public class Page_AllCollections extends BaseClass {
 		input_priceFrom.sendKeys("1000");
 		input_priceTo.sendKeys("2000");
 		// input_priceTo.sendKeys(Keys.ENTER);
+	}
+	public void closePriceBox() {
+		AutomationUtils.clickElementUsingJs(price, driver);
+		AutomationUtils.waitForElementToDisapper(price, driver);
 	}
 
 	public void sortByLowToHigh() {

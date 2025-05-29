@@ -6,6 +6,8 @@
       <class name="com.testcases.Tc_AllCollections">
         <methods>
           <include name="allCollectionsTest"/>
+          <include name="browserClose"/>
+          <include name="urlLaunch"/>
         </methods>
       </class> <!-- com.testcases.Tc_AllCollections -->
     </classes>

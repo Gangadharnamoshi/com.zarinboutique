@@ -25,6 +25,7 @@ public class Tc_AllCollections {
 		allCollections.clickOnAllCollections();
 		allCollections.clickOnAvailability();
 		allCollections.clickOnInStock();
+		allCollections.closeAvailabilityBox();
 		allCollections.enterMinimumAndMaximumPrice();
 		allCollections.sortByLowToHigh();
 		allCollections.clickOnProduct();

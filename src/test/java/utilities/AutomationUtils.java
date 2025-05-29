@@ -32,5 +32,10 @@ public class AutomationUtils {
 		element.click();
 	}
 	
+	public static void waitForElementToDisapper(WebElement element,WebDriver driver) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.invisibilityOf(element));
+	}
+	
 	
 }
