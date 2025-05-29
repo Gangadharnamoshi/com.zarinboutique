@@ -7,7 +7,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.common.BaseClass;
+import com.relevantcodes.extentreports.LogStatus;
 
+import extentreport.ReportUtil;
 import utilities.AutomationUtils;
 
 public class Page_AllCollections extends BaseClass {
@@ -54,8 +56,11 @@ public class Page_AllCollections extends BaseClass {
 	private WebElement checkout;
 
 	public boolean isZarinLogoDisplayed() {
+		ReportUtil.logStep("Checking Logo ",LogStatus.INFO);
 		highLightElement(zarinLogo);
+		ReportUtil.logStep("Logo Dispalyed",LogStatus.PASS);
 		return zarinLogo.isDisplayed();
+		
 	}
 
 	public void clickOnAllCollections() {

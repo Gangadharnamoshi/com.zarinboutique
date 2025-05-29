@@ -8,7 +8,10 @@ import org.testng.annotations.Test;
 
 import com.common.BaseClass;
 import com.pages.Page_AllCollections;
+import org.testng.annotations.Listeners;
+import extentreport.ExtentReporterNG;
 
+@Listeners(ExtentReporterNG.class)
 public class Tc_AllCollections {
 
 	BaseClass baseClass = new BaseClass();

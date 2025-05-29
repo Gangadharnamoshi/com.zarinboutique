@@ -30,12 +30,13 @@ public class BaseClass {
 
 			System.out.println("the project path is:" + System.getProperty("user.dir"));
 
-			FileReader fr = new FileReader(
+			fr = new FileReader(
 					System.getProperty("user.dir") + "//src//test//resources//config files//configuration.properties");
-			//FileReader fr1 = new FileReader(
-			//	System.getProperty("user.dir") + "//src//test//resources//config files//locators.properties");
+			// fr1 = new FileReader(
+			// System.getProperty("user.dir") + "//src//test//resources//config
+			// files//locators.properties");
 			prop.load(fr);
-			//loc.load(fr1);
+			// loc.load(fr1);
 		}
 
 		if (prop.getProperty("browser").equalsIgnoreCase("chrome")) {
@@ -62,11 +63,9 @@ public class BaseClass {
 		System.out.println("tear down succeessful");
 	}
 
-	//  Highlight method added here
+	// Highlight method added here
 	public void highLightElement(WebElement element) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].style.border='3px solid red'", element);
 	}
 }
-
-

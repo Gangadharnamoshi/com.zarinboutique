@@ -1,73 +1,94 @@
 package extentreport;
 
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.testng.IReporter;
-import org.testng.IResultMap;
-import org.testng.ISuite;
-import org.testng.ISuiteResult;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.xml.XmlSuite;
-
+import com.common.BaseClass;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
 
-public class ExtentReporterNG implements IReporter {
-	private ExtentReports extent;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-	public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
-		extent = new ExtentReports(outputDirectory + File.separator + "ExtentReport.html", true);
+public class ExtentReporterNG implements ITestListener {
 
-		for (ISuite suite : suites) {
-			Map<String, ISuiteResult> result = suite.getResults();
+    private static ExtentReports extent;
+    private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
-			for (ISuiteResult r : result.values()) {
-				ITestContext context = r.getTestContext();
+    static {
+        String reportPath = System.getProperty("user.dir") + File.separator + "test-output" + File.separator + "ExtentReport.html";
+        extent = new ExtentReports(reportPath, true);
+    }
 
-				buildTestNodes(context.getPassedTests(), LogStatus.PASS);
-				buildTestNodes(context.getFailedTests(), LogStatus.FAIL);
-				buildTestNodes(context.getSkippedTests(), LogStatus.SKIP);
-			}
-		}
+    @Override
+    public void onTestStart(ITestResult result) {
+        ExtentTest extentTest = extent.startTest(result.getMethod().getMethodName());
+        test.set(extentTest);
+    }
 
-		extent.flush();
-		extent.close();
-	}
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        test.get().log(LogStatus.PASS, "Test passed");
+        extent.endTest(test.get());
+    }
 
-	private void buildTestNodes(IResultMap tests, LogStatus status) {
-		ExtentTest test;
+    @Override
+    public void onTestFailure(ITestResult result) {
+        WebDriver driver = BaseClass.driver;;
 
-		if (tests.size() > 0) {
-			for (ITestResult result : tests.getAllResults()) {
-				test = extent.startTest(result.getMethod().getMethodName());
+        String screenshotPath = captureScreenshot(driver, result.getMethod().getMethodName());
 
-				test.setStartedTime(getTime(result.getStartMillis()));
-				test.setEndedTime(getTime(result.getEndMillis()));
+        ExtentTest extentTest = test.get();
+        extentTest.log(LogStatus.FAIL, result.getThrowable());
+        extentTest.log(LogStatus.FAIL, "Screenshot below: " + extentTest.addScreenCapture(screenshotPath));
 
-				for (String group : result.getMethod().getGroups())
-					test.assignCategory(group);
+        extent.endTest(extentTest);
+    }
 
-				if (result.getThrowable() != null) {
-					test.log(status, result.getThrowable());
-				} else {
-					test.log(status, "Test " + status.toString().toLowerCase() + "ed");
-				}
+    @Override
+    public void onTestSkipped(ITestResult result) {
+        test.get().log(LogStatus.SKIP, "Test skipped: " + result.getThrowable());
+        extent.endTest(test.get());
+    }
 
-				extent.endTest(test);
-			}
-		}
-	}
+    @Override
+    public void onFinish(ITestContext context) {
+        extent.flush();
+        extent.close();
+    }
 
-	private Date getTime(long millis) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(millis);
-		return calendar.getTime();
-	}
+    private String captureScreenshot(WebDriver driver, String testName) {
+        if (driver == null) return "";
 
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String screenshotDir = System.getProperty("user.dir") + File.separator + "test-output" + File.separator + "screenshots";
+        String screenshotPath = screenshotDir + File.separator + testName + "_" + timestamp + ".png";
+
+        File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        File destFile = new File(screenshotPath);
+
+        try {
+            FileUtils.copyFile(srcFile, destFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return screenshotPath;
+    }
+
+    // Optional (required by ITestListener but unused)
+    @Override public void onStart(ITestContext context) {}
+    @Override public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
+    @Override public void onTestFailedWithTimeout(ITestResult result) {}
+
+    public static ExtentTest getCurrentTest() {
+        return test.get();
+    }
 }
