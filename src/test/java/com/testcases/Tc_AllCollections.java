@@ -21,7 +21,7 @@ public class Tc_AllCollections {
 		baseClass.setup();
 	}
 
-	@Test(groups = { "smoke", "p2" }, testName = "verify_testcase_allcollections")
+	@Test(groups = { "smoke", "p2" ,"regression"},priority=1, testName = "verify_testcase_allcollections")
 	public void allCollectionsTest() {
 		Page_AllCollections allCollections = new Page_AllCollections(baseClass.getdriver());
 		allCollections.isZarinLogoDisplayed();
