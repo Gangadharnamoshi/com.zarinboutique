@@ -117,5 +117,9 @@ public class Page_AllCollections extends BaseClass {
 	public void clickOnCheckout() {
 		checkout.click();
 	}
+	
+	public void update() {
+		
+	}
 
 }
