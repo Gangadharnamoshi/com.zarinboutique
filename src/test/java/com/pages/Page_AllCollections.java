@@ -118,8 +118,6 @@ public class Page_AllCollections extends BaseClass {
 		checkout.click();
 	}
 	
-	public void update() {
-		
-	}
+	
 
 }
