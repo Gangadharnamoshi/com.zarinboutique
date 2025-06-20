@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.testcases.Tc_AllCollections">
+      <class name="com.testcases.Tc_login">
         <methods>
-          <include name="allCollectionsTest"/>
-          <include name="browserClose"/>
-          <include name="urlLaunch"/>
+          <include name="urlLanuch"/>
+          <include name="login"/>
+          <include name="urlClose"/>
         </methods>
-      </class> <!-- com.testcases.Tc_AllCollections -->
+      </class> <!-- com.testcases.Tc_login -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

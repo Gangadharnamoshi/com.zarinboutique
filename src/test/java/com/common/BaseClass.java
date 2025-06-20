@@ -44,7 +44,7 @@ public class BaseClass {
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-			driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+			driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 			driver.get(prop.getProperty("testurl"));
 
 		} else if (prop.getProperty("browser").equalsIgnoreCase("edge")) {
