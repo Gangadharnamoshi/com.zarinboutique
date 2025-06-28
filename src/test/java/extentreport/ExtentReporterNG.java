@@ -41,7 +41,8 @@ public class ExtentReporterNG implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        WebDriver driver = BaseClass.driver;;
+        // ✅ Use ThreadLocal WebDriver
+        WebDriver driver = ((BaseClass) result.getInstance()).getdriver();
 
         String screenshotPath = captureScreenshot(driver, result.getMethod().getMethodName());
 
@@ -83,7 +84,7 @@ public class ExtentReporterNG implements ITestListener {
         return screenshotPath;
     }
 
-    // Optional (required by ITestListener but unused)
+    // Optional methods
     @Override public void onStart(ITestContext context) {}
     @Override public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
     @Override public void onTestFailedWithTimeout(ITestResult result) {}

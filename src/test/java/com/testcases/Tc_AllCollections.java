@@ -2,44 +2,41 @@ package com.testcases;
 
 import java.io.IOException;
 
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import com.common.BaseClass;
 import com.pages.Page_AllCollections;
-import org.testng.annotations.Listeners;
+
 import extentreport.ExtentReporterNG;
+import org.testng.annotations.Listeners;
 
 @Listeners(ExtentReporterNG.class)
-public class Tc_AllCollections {
+public class Tc_AllCollections extends BaseClass {
 
-	BaseClass baseClass = new BaseClass();
+    @Parameters("browser")
+    @BeforeMethod
+    public void urlLaunch(String browser) throws IOException {
+        setup(browser); // use inherited method from BaseClass
+    }
 
-	@BeforeTest
-	public void urlLaunch() throws IOException {
-		baseClass.setup();
-	}
+    @Test(groups = { "smoke", "p2", "regression" }, priority = 1, testName = "verify_testcase_allcollections")
+    public void allCollectionsTest() {
+        Page_AllCollections allCollections = new Page_AllCollections(); // no need to pass driver
+        allCollections.isZarinLogoDisplayed();
+        allCollections.clickOnAllCollections();
+        allCollections.clickOnAvailability();
+        allCollections.clickOnInStock();
+        allCollections.closeAvailabilityBox();
+        allCollections.enterMinimumAndMaximumPrice();
+        allCollections.sortByLowToHigh();
+        allCollections.clickOnProduct();
+        allCollections.addToCart();
+        allCollections.clickOnViewCart();
+        allCollections.clickOnCheckout();
+    }
 
-	@Test(groups = { "smoke", "p2" ,"regression"},priority=1, testName = "verify_testcase_allcollections")
-	public void allCollectionsTest() {
-		Page_AllCollections allCollections = new Page_AllCollections(baseClass.getdriver());
-		allCollections.isZarinLogoDisplayed();
-		allCollections.clickOnAllCollections();
-		allCollections.clickOnAvailability();
-		allCollections.clickOnInStock();
-		allCollections.closeAvailabilityBox();
-		allCollections.enterMinimumAndMaximumPrice();
-		allCollections.sortByLowToHigh();
-		allCollections.clickOnProduct();
-		allCollections.addToCart();
-		allCollections.clickOnViewCart();
-		allCollections.clickOnCheckout();
-	}
-
-	@AfterTest
-	public void browserClose() {
-		baseClass.teardown();
-	}
-
+    @AfterMethod
+    public void browserClose() {
+        teardown(); // inherited, thread-safe
+    }
 }

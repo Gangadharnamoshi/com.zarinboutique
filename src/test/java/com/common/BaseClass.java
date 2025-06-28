@@ -15,57 +15,61 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseClass {
 
-	public static WebDriver driver;
-	public static Properties prop = new Properties();
-	public static Properties loc = new Properties();
-	public static FileReader fr;
-	public static FileReader fr1;
+    // ThreadLocal WebDriver for parallel execution
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-	public WebDriver getdriver() {
-		return driver;
-	}
+    public static Properties prop = new Properties();
+    public static Properties loc = new Properties();
+    public static FileReader fr;
+    public static FileReader fr1;
 
-	public void setup() throws IOException {
-		if (driver == null) {
+    // Get driver instance from ThreadLocal
+    public WebDriver getdriver() {
+        return driver.get();
+    }
 
-			System.out.println("the project path is:" + System.getProperty("user.dir"));
+    // Set up browser and properties
+    public void setup(String browserName) throws IOException {
+        if (getdriver() == null) {
 
-			fr = new FileReader(
-					System.getProperty("user.dir") + "//src//test//resources//config files//configuration.properties");
-			// fr1 = new FileReader(
-			// System.getProperty("user.dir") + "//src//test//resources//config
-			// files//locators.properties");
-			prop.load(fr);
-			// loc.load(fr1);
-		}
+            System.out.println("Project path: " + System.getProperty("user.dir"));
 
-		if (prop.getProperty("browser").equalsIgnoreCase("chrome")) {
-			WebDriverManager.chromedriver().setup();
-			driver = new ChromeDriver();
-			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-			driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-			driver.get(prop.getProperty("testurl"));
+            fr = new FileReader(System.getProperty("user.dir") + "/src/test/resources/config files/configuration.properties");
+            prop.load(fr);
 
-		} else if (prop.getProperty("browser").equalsIgnoreCase("edge")) {
-			WebDriverManager.edgedriver().setup();
-			driver = new EdgeDriver();
-			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-			driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-			driver.get(prop.getProperty("testurl"));
+            WebDriver localDriver = null;
 
-		}
-	}
+            if (prop.getProperty("browser").equalsIgnoreCase("chrome")) {
+                WebDriverManager.chromedriver().setup();
+                localDriver = new ChromeDriver();
 
-	public void teardown() {
-		driver.close();
-		System.out.println("tear down succeessful");
-	}
+            } else if (prop.getProperty("browser").equalsIgnoreCase("edge")) {
+                WebDriverManager.edgedriver().setup();
+                localDriver = new EdgeDriver();
+            }
 
-	// Highlight method added here
-	public void highLightElement(WebElement element) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].style.border='3px solid red'", element);
-	}
+            driver.set(localDriver); // set to ThreadLocal
+
+            getdriver().manage().window().maximize();
+            getdriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+            getdriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+            getdriver().get(prop.getProperty("testurl"));
+        }
+    }
+
+    // Close browser and clean up thread-local
+    public void teardown() {
+        if (getdriver() != null) {
+            getdriver().close();
+            getdriver().quit();
+            driver.remove(); // very important to avoid memory leaks
+            System.out.println("Teardown successful");
+        }
+    }
+
+    // Highlight an element
+    public void highLightElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) getdriver();
+        js.executeScript("arguments[0].style.border='3px solid red'", element);
+    }
 }

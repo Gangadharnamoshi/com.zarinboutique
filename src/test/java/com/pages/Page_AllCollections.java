@@ -14,110 +14,104 @@ import utilities.AutomationUtils;
 
 public class Page_AllCollections extends BaseClass {
 
-	public Page_AllCollections(WebDriver driver) {
-		this.driver = driver;
-		PageFactory.initElements(driver, this);
-	}
+    public Page_AllCollections() {
+    
+        PageFactory.initElements(getdriver(), this); // getdriver() uses ThreadLocal
+    }
 
-	@FindBy(xpath = "//a[@class='header__heading-link link link--text focus-inset']")
-	private WebElement zarinLogo;
+    @FindBy(xpath = "//a[@class='header__heading-link link link--text focus-inset']")
+    private WebElement zarinLogo;
 
-	@FindBy(xpath = "//a[@id='HeaderMenu-all-collection']")
-	private WebElement allCollections;
+    @FindBy(xpath = "//a[@id='HeaderMenu-all-collection']")
+    private WebElement allCollections;
 
-	@FindBy(xpath = "(//span[contains(text(),'Availability')])[1]")
-	private WebElement availability;
+    @FindBy(xpath = "(//span[contains(text(),'Availability')])[1]")
+    private WebElement availability;
 
-	@FindBy(xpath = "(//span[contains(text(),'In stock')])[1]")
-	private WebElement inStock;
+    @FindBy(xpath = "(//span[contains(text(),'In stock')])[1]")
+    private WebElement inStock;
 
-	@FindBy(xpath = "(//span[contains(text(),'Price')])[1]")
-	private WebElement price;
+    @FindBy(xpath = "(//span[contains(text(),'Price')])[1]")
+    private WebElement price;
 
-	@FindBy(xpath = "//input[@id='Filter-Price-GTE']")
-	private WebElement input_priceFrom;
+    @FindBy(xpath = "//input[@id='Filter-Price-GTE']")
+    private WebElement input_priceFrom;
 
-	@FindBy(xpath = "//input[@id='Filter-Price-LTE']")
-	private WebElement input_priceTo;
+    @FindBy(xpath = "//input[@id='Filter-Price-LTE']")
+    private WebElement input_priceTo;
 
-	@FindBy(xpath = "//select[@id='SortBy']")
-	private WebElement dropDown_sortBy;
+    @FindBy(xpath = "//select[@id='SortBy']")
+    private WebElement dropDown_sortBy;
 
-	@FindBy(xpath = "//a[@id=\"CardLink-template--23093092057361__product-grid-10214381715729\"]")
-	private WebElement product;
+    @FindBy(xpath = "//a[@id='CardLink-template--23093092057361__product-grid-10214381715729']")
+    private WebElement product;
 
-	@FindBy(xpath = "//button[@name='add']")
-	private WebElement button_addCart;
+    @FindBy(xpath = "//button[@name='add']")
+    private WebElement button_addCart;
 
-	@FindBy(xpath = "//a[@id='cart-notification-button']")
-	private WebElement viewCart;
+    @FindBy(xpath = "//a[@id='cart-notification-button']")
+    private WebElement viewCart;
 
-	@FindBy(xpath = "//button[@id='checkout']")
-	private WebElement checkout;
+    @FindBy(xpath = "//button[@id='checkout']")
+    private WebElement checkout;
 
-	public boolean isZarinLogoDisplayed() {
-		ReportUtil.logStep("Checking Logo ",LogStatus.INFO);
-		highLightElement(zarinLogo);
-		ReportUtil.logStep("Logo Dispalyed",LogStatus.PASS);
-		return zarinLogo.isDisplayed();
-		
-	}
+    public boolean isZarinLogoDisplayed() {
+        ReportUtil.logStep("Checking Logo ", LogStatus.INFO);
+        highLightElement(zarinLogo);
+        ReportUtil.logStep("Logo Displayed", LogStatus.PASS);
+        return zarinLogo.isDisplayed();
+    }
 
-	public void clickOnAllCollections() {
-		highLightElement(allCollections);
-		allCollections.click();
-	}
+    public void clickOnAllCollections() {
+        highLightElement(allCollections);
+        allCollections.click();
+    }
 
-	public void clickOnAvailability() {
-		highLightElement(availability);
-		AutomationUtils.waitForTheElementAndClick(availability, driver);
-	}
+    public void clickOnAvailability() {
+        highLightElement(availability);
+        AutomationUtils.waitForTheElementAndClick(availability, getdriver());
+    }
 
-	public void clickOnInStock() {
-		highLightElement(inStock);
-		AutomationUtils.clickElementUsingJs(inStock, driver);
-	}
-	
-	public void closeAvailabilityBox() {
-		highLightElement(availability);
-		AutomationUtils.clickElementUsingJs(allCollections, driver);
-		AutomationUtils.waitForElementToDisapper(allCollections, driver);
-	}
-	
-	
+    public void clickOnInStock() {
+        highLightElement(inStock);
+        AutomationUtils.clickElementUsingJs(inStock, getdriver());
+    }
 
-	public void enterMinimumAndMaximumPrice() {
-		AutomationUtils.waitForTheElementToBeClickable(price, driver);
-		AutomationUtils.clickElementUsingJs(price, driver);
-		input_priceFrom.sendKeys("1000");
-		input_priceTo.sendKeys("2000");
-		// input_priceTo.sendKeys(Keys.ENTER);
-	}
-	public void closePriceBox() {
-		AutomationUtils.clickElementUsingJs(price, driver);
-		AutomationUtils.waitForElementToDisapper(price, driver);
-	}
+    public void closeAvailabilityBox() {
+        highLightElement(availability);
+        AutomationUtils.clickElementUsingJs(allCollections, getdriver());
+        AutomationUtils.waitForElementToDisapper(allCollections, getdriver());
+    }
 
-	public void sortByLowToHigh() {
-		AutomationUtils.selectByVisibleText(dropDown_sortBy, "Price, low to high");
-	}
+    public void enterMinimumAndMaximumPrice() {
+        AutomationUtils.waitForTheElementToBeClickable(price, getdriver());
+        AutomationUtils.clickElementUsingJs(price, getdriver());
+        input_priceFrom.sendKeys("1000");
+        input_priceTo.sendKeys("2000");
+    }
 
-	public void clickOnProduct() {
-		AutomationUtils.clickElementUsingJs(product, driver);
-	}
+    public void closePriceBox() {
+        AutomationUtils.clickElementUsingJs(price, getdriver());
+        AutomationUtils.waitForElementToDisapper(price, getdriver());
+    }
 
-	public void addToCart() {
-		AutomationUtils.waitForTheElementAndClick(button_addCart, driver);
-	}
+    public void sortByLowToHigh() {
+        AutomationUtils.selectByVisibleText(dropDown_sortBy, "Price, low to high");
+    }
 
-	public void clickOnViewCart() {
-		AutomationUtils.waitForTheElementAndClick(viewCart, driver);
-	}
+    public void clickOnProduct() {
+        AutomationUtils.clickElementUsingJs(product, getdriver());
+    }
 
-	public void clickOnCheckout() {
-		checkout.click();
-	}
-	
-	
+    public void addToCart() {
+        AutomationUtils.waitForTheElementAndClick(button_addCart, getdriver());
+    }
 
+    public void clickOnViewCart() {
+        AutomationUtils.waitForTheElementAndClick(viewCart, getdriver());
+    }
+
+    public void clickOnCheckout() {
+        checkout.click();
+    }
 }
